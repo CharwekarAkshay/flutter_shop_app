@@ -1,7 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:shop_app/screens/product_detail_screen.dart';
+import 'package:shop_app/screens/product_overview_screen.dart';
+
+import './providers/products.dart';
+import './providers/cart.dart';
+import './providers/orders.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    MultiProvider(providers: [
+      ChangeNotifierProvider.value(value: Products(),),
+      ChangeNotifierProvider.value(value: Cart(),),
+      ChangeNotifierProvider.value(value: Orders(),),
+    ], child: MyApp()),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -11,11 +25,14 @@ class MyApp extends StatelessWidget {
       title: 'Shopping application',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.cyan,
+        accentColor: Colors.deepOrange,
+        textTheme: GoogleFonts.latoTextTheme(),
       ),
-      home: Center(
-        child: Text('Flutter Demo Home Page'),
-      ),
+      home: ProductOverviewScreen(),
+      routes: {
+        ProductDetailScreen.routeName: (context) => ProductDetailScreen(),
+      },
     );
   }
 }

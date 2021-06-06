@@ -14,7 +14,7 @@ class CartItem {
   });
 }
 
-class Card with ChangeNotifier {
+class Cart with ChangeNotifier {
   Map<String, CartItem> _items = {};
 
   Map<String, CartItem> get items {
