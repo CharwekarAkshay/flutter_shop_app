@@ -5,6 +5,7 @@ import 'package:shop_app/screens/cart_screen.dart';
 import 'package:shop_app/screens/orders_screen.dart';
 import 'package:shop_app/screens/product_detail_screen.dart';
 import 'package:shop_app/screens/product_overview_screen.dart';
+import 'package:shop_app/screens/user_products_screen.dart';
 
 import './providers/products.dart';
 import './providers/cart.dart';
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
         ProductDetailScreen.routeName: (context) => ProductDetailScreen(),
         CartScreen.routeName: (context) => CartScreen(),
         OrdersScreen.routeName: (ctx) => OrdersScreen(),
+        UserProductsScreen.routeName: (context) => UserProductsScreen(),
       },
     );
   }
