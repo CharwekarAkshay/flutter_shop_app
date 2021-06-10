@@ -117,6 +117,27 @@ class _EditProductScreenState extends State<EditProductScreen> {
           });
           Navigator.of(context).pop();
         },
+      ).catchError(
+        (error) {
+          showDialog<Null>(
+            context: context,
+            builder: (ctx) => AlertDialog(
+              title: Text("An error occured !"),
+              content: Text("Something went wrong."),
+              actions: [
+                TextButton(
+                  child: Text("Okay"),
+                  onPressed: () {
+                    setState(() {
+                      _isLoading = false;
+                    });
+                    Navigator.of(ctx).pop();
+                  },
+                )
+              ],
+            ),
+          );
+        },
       );
     }
   }

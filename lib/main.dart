@@ -8,23 +8,26 @@ import 'package:shop_app/screens/product_detail_screen.dart';
 import 'package:shop_app/screens/product_overview_screen.dart';
 import 'package:shop_app/screens/user_products_screen.dart';
 
-import './providers/products.dart';
 import './providers/cart.dart';
 import './providers/orders.dart';
+import './providers/products.dart';
 
 void main() {
   runApp(
-    MultiProvider(providers: [
-      ChangeNotifierProvider.value(
-        value: Products(),
-      ),
-      ChangeNotifierProvider.value(
-        value: Cart(),
-      ),
-      ChangeNotifierProvider.value(
-        value: Orders(),
-      ),
-    ], child: MyApp()),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(
+          value: Products(),
+        ),
+        ChangeNotifierProvider.value(
+          value: Cart(),
+        ),
+        ChangeNotifierProvider.value(
+          value: Orders(),
+        ),
+      ],
+      child: MyApp(),
+    ),
   );
 }
 
