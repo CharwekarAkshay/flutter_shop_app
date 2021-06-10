@@ -12,6 +12,7 @@ class ProductItem extends StatelessWidget {
     final product = Provider.of<Product>(context, listen: false);
     final cart = Provider.of<Cart>(context, listen: false);
     return ClipRRect(
+      borderRadius: BorderRadius.circular(18),
       child: GridTile(
         child: GestureDetector(
           onTap: () {

@@ -38,8 +38,11 @@ class MyApp extends StatelessWidget {
       title: 'Shopping application',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.cyan,
-        accentColor: Colors.deepOrange,
+        primaryColor: Color(0xFF125D98),
+        accentColor: Color(0xFFF5A962),
+        scaffoldBackgroundColor: Color(0xFFDDDDDD),
+        // primarySwatch: Colors.cyan,
+        // accentColor: Colors.deepOrange,
         textTheme: GoogleFonts.latoTextTheme(),
       ),
       home: ProductOverviewScreen(),

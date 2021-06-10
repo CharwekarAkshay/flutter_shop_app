@@ -28,18 +28,29 @@ class UserProductItem extends StatelessWidget {
             children: [
               IconButton(
                 onPressed: () {
-                  Navigator.of(context).pushNamed(EditProductScreen.routeName, arguments: id);
+                  Navigator.of(context)
+                      .pushNamed(EditProductScreen.routeName, arguments: id);
                 },
                 icon: Icon(Icons.edit),
                 color: Theme.of(context).primaryColor,
               ),
               IconButton(
-              icon: Icon(Icons.delete),
-              onPressed: () {
-                Provider.of<Products>(context, listen: false).deleteProduct(id);
-              },
-              color: Theme.of(context).errorColor,
-            ),
+                icon: Icon(Icons.delete),
+                onPressed: () async {
+                  try {
+                    await Provider.of<Products>(context, listen: false)
+                        .deleteProduct(id);
+                  } catch (error) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text("Deletion failed!"),
+                        backgroundColor: Theme.of(context).errorColor,
+                      ),
+                    );
+                  }
+                },
+                color: Theme.of(context).errorColor,
+              ),
             ],
           ),
         ));
