@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 
+import 'package:http/http.dart' as http;
 import 'product.dart';
 
 class Products with ChangeNotifier {
@@ -38,7 +41,7 @@ class Products with ChangeNotifier {
     ),
   ];
 
-  List<Product> get items{
+  List<Product> get items {
     return [..._items];
   }
 
@@ -50,19 +53,38 @@ class Products with ChangeNotifier {
     return _items.firstWhere((product) => product.id == id);
   }
 
-  void addNewProduct(Product product) {
-    final newProduct = Product(
-      title: product.title,
-      description:  product.description,
-      imageUrl: product.imageUrl,
-      price: product.price,
-      id: DateTime.now().toString(),
+  Future<void> addNewProduct(Product product) {
+    const url =
+        "https://shopapplication-4e66b-default-rtdb.firebaseio.com/products.json";
+    return http
+        .post(
+      Uri.parse(url),
+      body: json.encode(
+        {
+          'title': product.title,
+          'description': product.description,
+          'imageUrl': product.imageUrl,
+          'price': product.price,
+          'isFavorite': product.isFavorite,
+        },
+      ),
+    )
+        .then(
+      (response) {
+        final newProduct = Product(
+          title: product.title,
+          description: product.description,
+          imageUrl: product.imageUrl,
+          price: product.price,
+          id: json.decode(response.body)['name'],
+        );
+        _items.add(newProduct);
+        notifyListeners();
+      },
     );
-    _items.add(newProduct);
-    notifyListeners();
   }
 
- void updateProduct(String id, Product newProduct) {
+  void updateProduct(String id, Product newProduct) {
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
     if (prodIndex >= 0) {
       _items[prodIndex] = newProduct;
