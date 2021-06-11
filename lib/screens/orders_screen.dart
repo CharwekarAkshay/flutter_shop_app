@@ -14,47 +14,56 @@ class OrdersScreen extends StatefulWidget {
 }
 
 class _OrdersScreenState extends State<OrdersScreen> {
-  var _isLoading = false;
+  late Future _ordersFuture;
+
+  Future _obtainOrderFuture() {
+    return Provider.of<Orders>(context, listen: false).fetchAndSetOrder();
+  }
 
   @override
   void initState() {
-    setState(() {
-      _isLoading = true;
-    });
-    Provider.of<Orders>(context, listen: false).fetchAndSetOrder().then((_) {
-      setState(() {
-        _isLoading = false;
-      });
-    }).catchError(() {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Unable to fetch product"),
-          duration: Duration(seconds: 2),
-        ),
-      );
-      setState(() {
-        _isLoading = false;
-      });
-    });
+    _ordersFuture = _obtainOrderFuture();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final orderData = Provider.of<Orders>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Your Orders'),
       ),
       drawer: AppDrawer(),
-      body: _isLoading
-          ? LinearProgressIndicator()
-          : ListView.builder(
-              itemCount: orderData.orders.length,
-              itemBuilder: (context, index) => OrderItem(
-                order: orderData.orders[index],
-              ),
-            ),
+      body: FutureBuilder(
+        future: _ordersFuture,
+        builder: (context, dataSnapshot) {
+          if (dataSnapshot.connectionState == ConnectionState.waiting) {
+            return LinearProgressIndicator();
+          } else {
+            if (dataSnapshot.error != null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text("Unable to fetch product"),
+                  duration: Duration(seconds: 2),
+                ),
+              );
+              return Center(
+                child: SizedBox.shrink(),
+              );
+            } else {
+              final orderData = Provider.of<Orders>(
+                context,
+                listen: false,
+              );
+              return ListView.builder(
+                itemCount: orderData.orders.length,
+                itemBuilder: (context, index) => OrderItem(
+                  order: orderData.orders[index],
+                ),
+              );
+            }
+          }
+        },
+      ),
     );
   }
 }

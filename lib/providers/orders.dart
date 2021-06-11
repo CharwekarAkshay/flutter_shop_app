@@ -31,7 +31,6 @@ class Orders with ChangeNotifier {
         "https://shopapplication-4e66b-default-rtdb.firebaseio.com/orders.json";
     try {
       final response = await http.get(Uri.parse(url));
-      print(response.body);
       final List<OrderItem> loadedOrder = [];
       final extratedData = json.decode(response.body) as Map<String, dynamic>;
       if (extratedData == null) {
