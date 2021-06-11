@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
 class Badge extends StatelessWidget {
-  Badge(
-      {Key? key,
-      required this.child,
-      required this.value,
-      this.color = Colors.transparent})
-      : super(key: key);
+  Badge({
+    Key? key,
+    required this.child,
+    required this.value,
+    this.color = Colors.transparent,
+  }) : super(key: key);
 
   final Widget? child;
-  final String value;
+  final String value; 
   Color color;
 
   @override
