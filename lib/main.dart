@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_app/screens/auth_screen.dart';
 import 'package:shop_app/screens/cart_screen.dart';
 import 'package:shop_app/screens/edit_product_screen.dart';
 import 'package:shop_app/screens/orders_screen.dart';
@@ -45,13 +46,15 @@ class MyApp extends StatelessWidget {
         // accentColor: Colors.deepOrange,
         textTheme: GoogleFonts.latoTextTheme(),
       ),
-      home: ProductOverviewScreen(),
+      // home: ProductOverviewScreen(),
+      home: AuthScreen(),
       routes: {
-        ProductDetailScreen.routeName: (context) => ProductDetailScreen(),
-        CartScreen.routeName: (context) => CartScreen(),
+        ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
+        CartScreen.routeName: (ctx) => CartScreen(),
         OrdersScreen.routeName: (ctx) => OrdersScreen(),
-        UserProductsScreen.routeName: (context) => UserProductsScreen(),
+        UserProductsScreen.routeName: (ctx) => UserProductsScreen(),
         EditProductScreen.routeName: (ctx) => EditProductScreen(),
+        AuthScreen.routeName: (ctx) => AuthScreen(),
       },
     );
   }
