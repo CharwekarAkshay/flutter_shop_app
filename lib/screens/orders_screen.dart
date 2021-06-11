@@ -14,9 +14,28 @@ class OrdersScreen extends StatefulWidget {
 }
 
 class _OrdersScreenState extends State<OrdersScreen> {
+  var _isLoading = false;
+
   @override
   void initState() {
-    Provider.of<Orders>(context, listen: false).fetchAndSetOrder();
+    setState(() {
+      _isLoading = true;
+    });
+    Provider.of<Orders>(context, listen: false).fetchAndSetOrder().then((_) {
+      setState(() {
+        _isLoading = false;
+      });
+    }).catchError(() {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Unable to fetch product"),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      setState(() {
+        _isLoading = false;
+      });
+    });
     super.initState();
   }
 
@@ -28,12 +47,14 @@ class _OrdersScreenState extends State<OrdersScreen> {
         title: Text('Your Orders'),
       ),
       drawer: AppDrawer(),
-      body: ListView.builder(
-        itemCount: orderData.orders.length,
-        itemBuilder: (context, index) => OrderItem(
-          order: orderData.orders[index],
-        ),
-      ),
+      body: _isLoading
+          ? LinearProgressIndicator()
+          : ListView.builder(
+              itemCount: orderData.orders.length,
+              itemBuilder: (context, index) => OrderItem(
+                order: orderData.orders[index],
+              ),
+            ),
     );
   }
 }
