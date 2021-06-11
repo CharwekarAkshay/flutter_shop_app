@@ -207,7 +207,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       initialValue: _initValues['price'],
                       decoration: InputDecoration(labelText: 'Price'),
                       textInputAction: TextInputAction.next,
-                      inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r"^\d*\.?\d*$"))],
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                            RegExp(r"^\d*\.?\d*$"))
+                      ],
                       keyboardType: TextInputType.number,
                       focusNode: _priceFocusNode,
                       onFieldSubmitted: (_) {

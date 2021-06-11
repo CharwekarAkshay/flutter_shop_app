@@ -26,9 +26,50 @@ class Orders with ChangeNotifier {
     return [..._orders];
   }
 
+  Future<void> fetchAndSetOrder() async {
+    final url =
+        "https://shopapplication-4e66b-default-rtdb.firebaseio.com/orders.json";
+    try {
+      final response = await http.get(Uri.parse(url));
+      print(response.body);
+      final List<OrderItem> loadedOrder = [];
+      final extratedData = json.decode(response.body) as Map<String, dynamic>;
+      if (extratedData == null) {
+        return;
+      }
+      extratedData.forEach(
+        (orderId, orderData) {
+          loadedOrder.add(
+            new OrderItem(
+              id: orderId,
+              amount: orderData['amount'],
+              products: (orderData['products'] as List<dynamic>)
+                  .map(
+                    (product) => CartItem(
+                      id: product['id'],
+                      title: product['title'],
+                      quantity: product['quantity'],
+                      price: product['price'],
+                    ),
+                  )
+                  .toList(),
+              dateTime: DateTime.parse(
+                orderData['dateTime'],
+              ),
+            ),
+          );
+        },
+      );
+      _orders = loadedOrder;
+      notifyListeners();
+    } catch (error) {
+      throw error;
+    }
+  }
+
   Future<void> addOrder(List<CartItem> cartProducts, double total) async {
     final url =
-        "https://shopapplication-4e66b-default-rtdb.firebaseio.com/products.json";
+        "https://shopapplication-4e66b-default-rtdb.firebaseio.com/orders.json";
     final timeStamp = DateTime.now();
     try {
       final response = await http.post(Uri.parse(url),
@@ -58,6 +99,8 @@ class Orders with ChangeNotifier {
         ),
       );
       notifyListeners();
-    } catch (error) {}
+    } catch (error) {
+      throw error;
+    }
   }
 }
