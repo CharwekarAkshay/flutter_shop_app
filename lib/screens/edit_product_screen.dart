@@ -209,7 +209,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       textInputAction: TextInputAction.next,
                       inputFormatters: [
                         FilteringTextInputFormatter.allow(
-                            RegExp(r"^\d*\.?\d*$"))
+                          RegExp(r"^\d*\.?\d*$"),
+                        )
                       ],
                       keyboardType: TextInputType.number,
                       focusNode: _priceFocusNode,

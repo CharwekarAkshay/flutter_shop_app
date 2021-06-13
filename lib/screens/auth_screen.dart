@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/models/http_exception.dart';
 import 'package:shop_app/providers/auth.dart';
+import 'package:shop_app/screens/product_overview_screen.dart';
 
 enum AuthMode { SIGN_UP, LOGIN }
 

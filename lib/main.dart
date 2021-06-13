@@ -6,6 +6,7 @@ import 'package:shop_app/screens/cart_screen.dart';
 import 'package:shop_app/screens/edit_product_screen.dart';
 import 'package:shop_app/screens/orders_screen.dart';
 import 'package:shop_app/screens/product_detail_screen.dart';
+import 'package:shop_app/screens/product_overview_screen.dart';
 import 'package:shop_app/screens/user_products_screen.dart';
 
 import './providers/auth.dart';
@@ -18,16 +19,27 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider.value(
-          value: Products(),
+          value: Auth(),
+        ),
+        ChangeNotifierProxyProvider<Auth, Products>(
+          create: (ctx) => Products(token: '', itemsList: []),
+          update: (ctx, auth, previousProducs) => Products(
+            token: auth.token!,
+            itemsList: previousProducs == null ? [] : previousProducs.items,
+          ),
         ),
         ChangeNotifierProvider.value(
           value: Cart(),
         ),
-        ChangeNotifierProvider.value(
-          value: Orders(),
-        ),
-        ChangeNotifierProvider.value(
-          value: Auth(),
+        ChangeNotifierProxyProvider<Auth, Orders>(
+          create: (ctx) => Orders(
+            authToken: '',
+            ordersList: [],
+          ),
+          update: (ctx, auth, previousOrders) => Orders(
+            authToken: auth.token!,
+            ordersList: previousOrders == null ? [] : previousOrders.ordersList,
+          ),
         ),
       ],
       child: MyApp(),
@@ -38,26 +50,30 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Shopping application',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primaryColor: Color(0xFF125D98),
-        accentColor: Color(0xFFF5A962),
-        scaffoldBackgroundColor: Color(0xFFDDDDDD),
-        // primarySwatch: Colors.cyan,
-        // accentColor: Colors.deepOrange,
-        textTheme: GoogleFonts.latoTextTheme(),
-      ),
-      // home: ProductOverviewScreen(),
-      home: AuthScreen(),
-      routes: {
-        ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
-        CartScreen.routeName: (ctx) => CartScreen(),
-        OrdersScreen.routeName: (ctx) => OrdersScreen(),
-        UserProductsScreen.routeName: (ctx) => UserProductsScreen(),
-        EditProductScreen.routeName: (ctx) => EditProductScreen(),
-        AuthScreen.routeName: (ctx) => AuthScreen(),
+    return Consumer<Auth>(
+      builder: (ctx, auth, _) {
+        return MaterialApp(
+          title: 'Shopping application',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primaryColor: Color(0xFF125D98),
+            accentColor: Color(0xFFF5A962),
+            scaffoldBackgroundColor: Color(0xFFDDDDDD),
+            // primarySwatch: Colors.cyan,
+            // accentColor: Colors.deepOrange,
+            textTheme: GoogleFonts.latoTextTheme(),
+          ),
+          // home: ProductOverviewScreen(),
+          home: auth.isAuth ? ProductOverviewScreen() : AuthScreen(),
+          routes: {
+            ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
+            CartScreen.routeName: (ctx) => CartScreen(),
+            OrdersScreen.routeName: (ctx) => OrdersScreen(),
+            UserProductsScreen.routeName: (ctx) => UserProductsScreen(),
+            EditProductScreen.routeName: (ctx) => EditProductScreen(),
+            AuthScreen.routeName: (ctx) => AuthScreen(),
+          },
+        );
       },
     );
   }
