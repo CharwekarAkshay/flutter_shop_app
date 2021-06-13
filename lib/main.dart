@@ -6,9 +6,9 @@ import 'package:shop_app/screens/cart_screen.dart';
 import 'package:shop_app/screens/edit_product_screen.dart';
 import 'package:shop_app/screens/orders_screen.dart';
 import 'package:shop_app/screens/product_detail_screen.dart';
-import 'package:shop_app/screens/product_overview_screen.dart';
 import 'package:shop_app/screens/user_products_screen.dart';
 
+import './providers/auth.dart';
 import './providers/cart.dart';
 import './providers/orders.dart';
 import './providers/products.dart';
@@ -25,6 +25,9 @@ void main() {
         ),
         ChangeNotifierProvider.value(
           value: Orders(),
+        ),
+        ChangeNotifierProvider.value(
+          value: Auth(),
         ),
       ],
       child: MyApp(),
