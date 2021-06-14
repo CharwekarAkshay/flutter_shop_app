@@ -60,9 +60,11 @@ class Products with ChangeNotifier {
     return itemsList.firstWhere((product) => product.id == id);
   }
 
-  Future<void> fetchAndSetProduct() async {
+  Future<void> fetchAndSetProduct([bool filterByUser = false]) async {
+    final filterString =
+        filterByUser ? '&orderBy="creatorId"&equalTo="$userId"' : '';
     final url =
-        "https://shopapplication-4e66b-default-rtdb.firebaseio.com/products.json?auth=$token";
+        'https://shopapplication-4e66b-default-rtdb.firebaseio.com/products.json?auth=$token$filterString';
     try {
       final response = await http.get(Uri.parse(url));
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
@@ -74,7 +76,7 @@ class Products with ChangeNotifier {
           "https://shopapplication-4e66b-default-rtdb.firebaseio.com/userFavorites/$userId.json?auth=$token";
       final favoriteResponse = await http.get(Uri.parse(favoriteProductUrl));
       final favoriteData = json.decode(favoriteResponse.body);
-      
+
       extractedData.forEach((productId, productData) {
         loadedProducts.add(
           Product(
@@ -82,13 +84,14 @@ class Products with ChangeNotifier {
             title: productData['title'],
             description: productData['description'],
             price: productData['price'],
-            isFavorite: favoriteData == null ? false :favoriteData[productId] ?? false,
+            isFavorite:
+                favoriteData == null ? false : favoriteData[productId] ?? false,
             imageUrl: productData['imageUrl'],
           ),
         );
-        itemsList = loadedProducts;
-        notifyListeners();
       });
+      itemsList = loadedProducts;
+      notifyListeners();
     } catch (error) {
       print(error);
       throw error;
@@ -107,6 +110,7 @@ class Products with ChangeNotifier {
             'description': product.description,
             'imageUrl': product.imageUrl,
             'price': product.price,
+            'creatorId': userId,
           },
         ),
       );
