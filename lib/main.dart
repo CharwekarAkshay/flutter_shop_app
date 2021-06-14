@@ -24,7 +24,7 @@ void main() {
         ChangeNotifierProxyProvider<Auth, Products>(
           create: (ctx) => Products(token: '', itemsList: [], userId: ''),
           update: (ctx, auth, previousProducs) => Products(
-            token: auth.token!,
+            token: auth.token,
             itemsList: previousProducs == null ? [] : previousProducs.items,
             userId: auth.userId!
           ),
@@ -39,7 +39,7 @@ void main() {
             ordersList: [],
           ),
           update: (ctx, auth, previousOrders) => Orders(
-            authToken: auth.token!,
+            authToken: auth.token,
             userId: auth.userId!,
             ordersList: previousOrders == null ? [] : previousOrders.ordersList,
           ),

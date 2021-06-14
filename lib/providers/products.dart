@@ -42,8 +42,8 @@ class Products with ChangeNotifier {
     // ),
   ];
 
-  final String token;
-  final String userId;
+  final String? token;
+  final String? userId;
 
   Products(
       {required this.token, required this.itemsList, required this.userId});
