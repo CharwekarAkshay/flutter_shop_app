@@ -22,10 +22,11 @@ void main() {
           value: Auth(),
         ),
         ChangeNotifierProxyProvider<Auth, Products>(
-          create: (ctx) => Products(token: '', itemsList: []),
+          create: (ctx) => Products(token: '', itemsList: [], userId: ''),
           update: (ctx, auth, previousProducs) => Products(
             token: auth.token!,
             itemsList: previousProducs == null ? [] : previousProducs.items,
+            userId: auth.userId!
           ),
         ),
         ChangeNotifierProvider.value(

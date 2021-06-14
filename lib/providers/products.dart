@@ -43,8 +43,10 @@ class Products with ChangeNotifier {
   ];
 
   final String token;
-  
-  Products({required this.token, required this.itemsList});
+  final String userId;
+
+  Products(
+      {required this.token, required this.itemsList, required this.userId});
 
   List<Product> get items {
     return [...itemsList];
@@ -66,6 +68,13 @@ class Products with ChangeNotifier {
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
       final List<Product> loadedProducts = [];
       if (extractedData == null) return;
+
+      // Extracting favorite products of user
+      final favoriteProductUrl =
+          "https://shopapplication-4e66b-default-rtdb.firebaseio.com/userFavorites/$userId.json?auth=$token";
+      final favoriteResponse = await http.get(Uri.parse(favoriteProductUrl));
+      final favoriteData = json.decode(favoriteResponse.body);
+      
       extractedData.forEach((productId, productData) {
         loadedProducts.add(
           Product(
@@ -73,8 +82,8 @@ class Products with ChangeNotifier {
             title: productData['title'],
             description: productData['description'],
             price: productData['price'],
+            isFavorite: favoriteData == null ? false :favoriteData[productId] ?? false,
             imageUrl: productData['imageUrl'],
-            isFavorite: productData['isFavorite'],
           ),
         );
         itemsList = loadedProducts;
@@ -98,7 +107,6 @@ class Products with ChangeNotifier {
             'description': product.description,
             'imageUrl': product.imageUrl,
             'price': product.price,
-            'isFavorite': product.isFavorite,
           },
         ),
       );
