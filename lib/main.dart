@@ -35,10 +35,12 @@ void main() {
         ChangeNotifierProxyProvider<Auth, Orders>(
           create: (ctx) => Orders(
             authToken: '',
+            userId: '',
             ordersList: [],
           ),
           update: (ctx, auth, previousOrders) => Orders(
             authToken: auth.token!,
+            userId: auth.userId!,
             ordersList: previousOrders == null ? [] : previousOrders.ordersList,
           ),
         ),
