@@ -78,15 +78,40 @@ class MyApp extends StatelessWidget {
                           : AuthScreen(),
                 ),
           routes: {
-            ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
-            CartScreen.routeName: (ctx) => CartScreen(),
-            OrdersScreen.routeName: (ctx) => OrdersScreen(),
-            UserProductsScreen.routeName: (ctx) => UserProductsScreen(),
-            EditProductScreen.routeName: (ctx) => EditProductScreen(),
-            AuthScreen.routeName: (ctx) => AuthScreen(),
+            ProductDetailScreen.routeName: (ctx) => checkIfAuthenticated(
+                  child: ProductDetailScreen(),
+                  auth: auth,
+                ),
+            CartScreen.routeName: (ctx) => checkIfAuthenticated(
+                  child: CartScreen(),
+                  auth: auth,
+                ),
+            OrdersScreen.routeName: (ctx) => checkIfAuthenticated(
+                  child: OrdersScreen(),
+                  auth: auth,
+                ),
+            UserProductsScreen.routeName: (ctx) => checkIfAuthenticated(
+                  child: UserProductsScreen(),
+                  auth: auth,
+                ),
+            EditProductScreen.routeName: (ctx) => checkIfAuthenticated(
+                  child: EditProductScreen(),
+                  auth: auth,
+                ),
+            AuthScreen.routeName: (ctx) => checkIfAuthenticated(
+                  child: AuthScreen(),
+                  auth: auth,
+                ),
           },
         );
       },
     );
   }
+}
+
+Widget checkIfAuthenticated({required Widget child, required Auth auth}) {
+  if (auth.token != '') {
+    return child;
+  }
+  return AuthScreen();
 }
