@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_app/helpers/custom_route.dart';
 import 'package:shop_app/screens/auth_screen.dart';
 import 'package:shop_app/screens/cart_screen.dart';
 import 'package:shop_app/screens/edit_product_screen.dart';
@@ -59,13 +60,19 @@ class MyApp extends StatelessWidget {
           title: 'Shopping application',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
-            primaryColor: Color(0xFF125D98),
-            accentColor: Color(0xFFF5A962),
-            scaffoldBackgroundColor: Color(0xFFDDDDDD),
-            // primarySwatch: Colors.cyan,
-            // accentColor: Colors.deepOrange,
-            textTheme: GoogleFonts.latoTextTheme(),
-          ),
+              primaryColor: Color(0xFF125D98),
+              accentColor: Color(0xFFF5A962),
+              scaffoldBackgroundColor: Color(0xFFDDDDDD),
+              // primarySwatch: Colors.cyan,
+              // accentColor: Colors.deepOrange,
+              textTheme: GoogleFonts.latoTextTheme(),
+              pageTransitionsTheme: PageTransitionsTheme(
+                builders: {
+                  TargetPlatform.windows: CustomPageTransitionBuilder(), 
+                  TargetPlatform.android:  CustomPageTransitionBuilder(),
+                  TargetPlatform.iOS:  CustomPageTransitionBuilder(),
+                },
+              )),
           // home: ProductOverviewScreen(),
           home: auth.isAuth
               ? ProductOverviewScreen()
